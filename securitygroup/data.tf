@@ -1,6 +1,10 @@
 data "aws_vpc" "default" {
-  for_each = { for scg in var.securitygroups : scg.vpc_name => scg }
+  for_each = toset(var.securitygroups[*].vpc_name)
   tags = {
-    Name = each.value.vpc_name
+    Name = each.key
   }
 }
+
+
+
+
