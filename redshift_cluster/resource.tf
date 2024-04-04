@@ -10,8 +10,12 @@ data "aws_iam_role" "roles" {
 }
 
 data "aws_security_group" "default" {
-
+  for_each = toset(var.vpc_security_group_names)
+  tags = {
+    Name = each.key
+  }
 }
+
 #### Redshift ##########################################################################################################
 resource "aws_redshift_cluster" "default" {
   for_each                             = toset([var.cluster_identifier])
@@ -25,14 +29,14 @@ resource "aws_redshift_cluster" "default" {
   cluster_subnet_group_name            = var.cluster_subnet_group_name
   cluster_parameter_group_name         = var.cluster_parameter_group_name
   publicly_accessible                  = var.publicly_accessible
-  vpc_security_group_ids               = [for scg_identifier in var.vpc_security_group_identifiers : var.scg_id[scg_identifier]]
+  vpc_security_group_ids               = [ for security_group_name in var.vpc_security_group_names : data.aws_security_group.default[security_group_name].id ]
   skip_final_snapshot                  = var.skip_final_snapshot
   availability_zone_relocation_enabled = var.availability_zone_relocation_enabled
-  encrypted                            = true
+  encrypted                            = var.encrypted
   availability_zone                    = alltrue([var.availability_zone_relocation_enabled, var.availability_zone != null]) ? var.publicly_accessible : null
   default_iam_role_arn                 = try(data.aws_iam_role.default_role[0].arn, null)
   iam_roles                            = [for key in var.iam_role_names : data.aws_iam_role.roles[key].arn] 
-  tags = merge({ "Name" = each.value.cluster_identifier }, each.value.tags )
+  tags = merge({ "Name" = var.cluster_identifier }, var.tags )
   timeouts {
     create = "10m"
     update = "20m"

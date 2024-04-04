@@ -31,7 +31,7 @@ variable "port" {
   default     = 5439
 }
 
-variable "vpc_security_group_identifiers" {
+variable "vpc_security_group_names" {
   description = "A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster."
   type        = list(string)
   default     = []
@@ -111,4 +111,9 @@ variable "iam_role_names" {
 variable "tags" {
   type = map(string)
   default = { }
+}
+
+variable "encrypted" {
+  type = bool
+  default = true
 }
