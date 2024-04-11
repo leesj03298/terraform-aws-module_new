@@ -36,7 +36,7 @@ resource "aws_security_group_rule" "sgr_cidr_blocks" {
 }
 
 resource "aws_security_group_rule" "sgr_source_security_group_id" {
-  for_each = { for rule in local.security_group_rules_optimize : "${rule.securitygroup}_${rule.portrange}_${rule.source}" => rule
+  for_each = { for rule in local.security_group_rules_optimize : "${rule.securitygroup_name}_${rule.portrange}_${rule.source}" => rule
   if can(regex("[0-9a-zA-Z]+-", rule.source)) }
   security_group_id        = local.scg_ids[each.value.securitygroup_name]
   type                     = each.value.type
