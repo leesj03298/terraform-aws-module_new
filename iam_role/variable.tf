@@ -1,6 +1,4 @@
 
-
-
 variable "roles" {
   type = list(object({
     name               = optional(string, null)

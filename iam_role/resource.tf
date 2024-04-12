@@ -19,8 +19,9 @@ resource "aws_iam_role" "default" {
   tags               = merge({ "Name" = each.value.name }, each.value.tags)
 }
 
-resource "aws_iam_role_policy_attachment" "test-attach" {
+resource "aws_iam_role_policy_attachment" "default" {
   for_each   = { for attachment in local.iam_role_policy_attachment : "${attachment.role_name}_${attachment.policy_name}" => attachment }
   role       = each.value.role_name
   policy_arn = data.aws_iam_policy.default[each.value.policy_name].arn
+  depends_on = [ aws_iam_role.default ]
 }
