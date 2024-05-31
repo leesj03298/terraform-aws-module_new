@@ -47,7 +47,8 @@ locals {
 
 ### AWS Route Table Assocation Subnet ########################################################################################################
 resource "aws_route_table_association" "default" {
-  for_each       = { for sub in var.subnets : sub.tf_identifier => sub if length(aws_route_table.default) != 0 && length(aws_subnet.default) != 0 }
+  for_each       = { for sub in var.subnets : sub.tf_identifier => sub 
+  if contains(keys(local.route_table_id), sub.association_route_table_name) && contains(keys(local.subnet_id), sub.subnet_name) }
   route_table_id = local.route_table_id[each.value.association_route_table_name]
   subnet_id      = local.subnet_id[each.value.subnet_name]
 }
