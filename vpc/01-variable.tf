@@ -12,7 +12,6 @@ variable "vpcs" {
     tags                  = optional(map(string), null)
   }))
   default = []
-
 }
 
 variable "subnets" {
