@@ -1,7 +1,7 @@
 # Terraform AWS Module
 - Terraform Repo URL : https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc
 
-## Example Template
+## Input Sample
 ```HCL
 module "vpc_subnet" {
   source = "../../../../terraform-aws-module_new//vpc"
@@ -35,8 +35,8 @@ module "vpc_subnet" {
 
   route_tables = [
     {
-      tf_identifier = "eks-app-lb-01"
-      vpc_name      = "vpc-an2-eks-dev-app-01" 
+      tf_identifier    = "eks-app-lb-01"
+      vpc_name         = "vpc-an2-eks-dev-app-01" 
       route_table_name = "rtb-an2-eks-dev-app-lb-01a"
     }
   ]
